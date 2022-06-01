@@ -27,3 +27,12 @@ services:
     environment:
       - "MYSQL_ROOT_PASSWORD=123456"
       - "MYSQL_DATABASE=star"
+  redis:
+    image: redis:5.0.10
+    ports:
+      - "6379:6379"
+    volumes:
+#      - redisdata:/data
+      - ./datadir:/data
+      - ./conf/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./logs:/logs

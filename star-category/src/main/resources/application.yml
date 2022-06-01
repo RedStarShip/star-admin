@@ -6,3 +6,18 @@ spring:
   cloud:
     nacos:
       server-addr: http://localhost:8848
+
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3309/star?characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: 123456
+##
+mybatis:
+  mapper-locations: classpath:com/star/mapper/*.xml
+  type-aliases-package: com.star.entity
+#
+logging:
+  level:
+    com.star.dao: debug

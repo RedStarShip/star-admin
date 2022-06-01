@@ -12,7 +12,7 @@ spring:
         - id: admins_router
           uri: lb://API-ADMINS
           predicates:
-            - Path=/admin/demos
+            - Path=/admin/tokens,/admin/admin-user,/admin/tokens/**
           filters:
             - StripPrefix=1
 
@@ -20,21 +20,21 @@ spring:
         - id: category_router
           uri: lb://API-CATEGORYS
           predicates:
-            - Path=/category/demos
+            - Path=/admin/categories/**
           filters:
             - StripPrefix=1
 #        videos router
         - id: videos_router
           uri: lb://API-VIDEOS
           predicates:
-            - Path=/videos/demos
+            - Path=/admin/videos/**
           filters:
             - StripPrefix=1
 #          users router
         - id: users_router
           uri: lb://API-USERS
           predicates:
-            - Path=/users/demos
+            - Path=/admin/users/**
           filters:  #去掉一级目录
             - StripPrefix=1
       globalcors:  #解决跨域
