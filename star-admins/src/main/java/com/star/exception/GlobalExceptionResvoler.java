@@ -14,3 +14,4 @@ public class GlobalExceptionResvoler implements HandlerExceptionResolver {
         return new ModelAndView("/xxx");
     }
 }
+
