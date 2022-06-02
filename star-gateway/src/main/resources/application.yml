@@ -23,6 +23,7 @@ spring:
             - Path=/admin/categories/**
           filters:
             - StripPrefix=1
+            - Token
 #        videos router
         - id: videos_router
           uri: lb://API-VIDEOS
@@ -30,6 +31,7 @@ spring:
             - Path=/admin/videos/**
           filters:
             - StripPrefix=1
+            - Token
 #          users router
         - id: users_router
           uri: lb://API-USERS
