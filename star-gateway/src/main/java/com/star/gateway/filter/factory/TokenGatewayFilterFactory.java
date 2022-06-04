@@ -1,6 +1,5 @@
 package com.star.gateway.filter.factory;
 
-
 import com.star.constant.RedisPrefix;
 import com.star.exceptions.IllegalTokenException;
 import org.slf4j.Logger;
@@ -18,7 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 
 //自定义token工厂
-@Component//在工厂中创建对象
+@Component  //代表在工厂中创建对象   @configuration 配置     @Component  在工厂中创建对象   使用 filtes -Token
+
 public class TokenGatewayFilterFactory extends AbstractGatewayFilterFactory<TokenGatewayFilterFactory.Config> {
 
     private static final Logger log = LoggerFactory.getLogger(TokenGatewayFilterFactory.class);
@@ -27,30 +27,30 @@ public class TokenGatewayFilterFactory extends AbstractGatewayFilterFactory<Toke
 
     @Autowired
     public TokenGatewayFilterFactory(RedisTemplate redisTemplate) {
+        super(Config.class);
         this.redisTemplate = redisTemplate;
     }
 
-
-    public TokenGatewayFilterFactory() {
-        super(Config.class);
-    }
-
-    //config参数就是基于当前类的配置
+    //Config 参数就是基于当前中Config创建对象
     @Override
     public GatewayFilter apply(Config config) {
-        return new GatewayFilter() {
+        return new GatewayFilter() {    // servlet service httpServletRequest  httpServletResponse 传统web springmvc   springwebflux new web模型 //filter   request response filterChain.dofilter(request,response)
             @Override
-            //ServerWebExchange 交换机
+            //参数1: exchange 交换机
             public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-                log.info("config required token ", config.requiredToken);
-                log.info("config required name ", config.name);
+                log.info("config required token: {}", config.requiredToken);
+                log.info("config name: {}", config.name);
                 if (config.requiredToken) {
                     //1.获取token信息
-                    if (exchange.getRequest().getQueryParams().get("token").get(0) == null)
-                        throw new IllegalTokenException("token为空");
+                    if (exchange.getRequest().getQueryParams().get("token") == null) {
+                        throw new IllegalTokenException("非法令牌!");
+                    }
                     String token = exchange.getRequest().getQueryParams().get("token").get(0);
-                    //2.根据token信息从redis中获取用户信息
-                    if (redisTemplate.hasKey(RedisPrefix.TOKEN_KEY + token)) throw new IllegalTokenException("不合法的token");
+                    log.info("token:{}", token);
+                    //2.根据token信息去redis获取
+                    if (!redisTemplate.hasKey(RedisPrefix.TOKEN_KEY+token)) {
+                        throw new IllegalTokenException("不合法的令牌!");
+                    }
                 }
                 return chain.filter(exchange);
             }
@@ -64,11 +64,11 @@ public class TokenGatewayFilterFactory extends AbstractGatewayFilterFactory<Toke
         return Arrays.asList("requiredToken", "name");
     }
 
+
     //自定义配置类
     public static class Config {
-        private boolean requiredToken; //默认为false
+        private boolean requiredToken;  //false
         private String name;
-
 
         public String getName() {
             return name;
@@ -86,5 +86,6 @@ public class TokenGatewayFilterFactory extends AbstractGatewayFilterFactory<Toke
             this.requiredToken = requiredToken;
         }
     }
+
 
 }

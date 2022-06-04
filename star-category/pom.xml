@@ -42,4 +42,21 @@
         </dependency>
 
     </dependencies>
+
+
+    <!--    引入插件-->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>
+                        com.star.AdminCategoryApplication
+                    </mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
