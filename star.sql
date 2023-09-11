@@ -5,7 +5,7 @@
  Source Server Type    : MySQL
  Source Server Version : 80023
  Source Host           : localhost:3307
- Source Schema         : yingxue
+ Source Schema         : star
 
  Target Server Type    : MySQL
  Target Server Version : 80023
